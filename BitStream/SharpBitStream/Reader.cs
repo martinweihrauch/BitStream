@@ -34,13 +34,13 @@ namespace SharpBitStream
             return temp;
         }
 
-        public void CheckIfReadIsValid(int bitLength, long offsetByteStream = 0, int offsetBit = 0)
+        public bool CheckIfReadIsValid(int bitLength, long offsetByteStream = 0, int offsetBit = 0)
         {
             if (offsetByteStream * 8 + offsetBit + bitLength > _properties.Stream.Length * 8)
             {
-                throw new InvalidOperationException("You are trying to read more data than the stream offers at: offsetByteStream: "
-                    + offsetByteStream + " / offsetBit: " + offsetBit);
+                return false;
             }
+            return true;
         }
 
         public bool IsBitSet(byte b, int bitPosition)

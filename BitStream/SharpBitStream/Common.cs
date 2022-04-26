@@ -16,7 +16,7 @@ namespace SharpBitStream
 			byte destinationToCopy = (byte)(destinationByte & destinationMask);
 			int diff = destStartBit - sourceStartBit;
 			byte sourceToCopy;
-			if (diff > 0)
+			if (diff >= 0)
 			{
 				sourceToCopy = (byte)((sourceByte & sourceMask) >> (diff));
 			}

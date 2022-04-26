@@ -58,35 +58,41 @@ namespace SharpBitStream
             return (b & 1 << bitPosition) != 0;
         }
 
-         public ulong PutBits(long offsetByteStream, int offsetBit, int bitLength, ulong sourceValue)
+         public Position PutBits(long offsetByteStream, int offsetBit, int bitLength, ulong sourceValue)
         {
+            _properties.Stream.Position = offsetByteStream;
             _properties.PositionBit = offsetBit;
             int bitLeft = bitLength;
-            _properties.Stream.Position = offsetByteStream;
-            _properties.CurrentByte = (byte)_properties.Stream.ReadByte();
-            _properties.Stream.Position = offsetByteStream; // Rewind to the byte, because has to be rewritten
-            int sourceValueBitOffset = 64 - bitLeft; // ulong has 64 bit, we read from left to right
 
             while (bitLeft > 0)
             {
+                 if (_properties.Stream.Position == _properties.Stream.Length)
+                {
+                    _properties.CurrentByte = 0;
+                }
+                else
+                {
+                    _properties.CurrentByte = (byte)_properties.Stream.ReadByte();
+                    _properties.Stream.Position = _properties.PositionByte;
+                }
                 int restBitsInCurrentByte = 8 - _properties.PositionBit;
                 int numberBitsToWriteIntoCurrentByte = bitLeft > restBitsInCurrentByte ? restBitsInCurrentByte : bitLeft;
-                byte tempSource = (byte)sourceValue; // Get the most right 8 bits
-                sourceValue >>= numberBitsToWriteIntoCurrentByte;
-
-                _properties.CurrentByte = Common.CopyBitsIntoByte( , _properties.CurrentByte, _properties.PositionBit, 8 - numberBitsToWriteIntoCurrentByte, numberBitsToWriteIntoCurrentByte);
-
-
-
-
+                byte tempSource = (byte)(sourceValue >> (bitLeft - numberBitsToWriteIntoCurrentByte)); // Get the most right 8 bits
+                _properties.CurrentByte = Common.CopyBitsIntoByte(tempSource, _properties.CurrentByte, 8-numberBitsToWriteIntoCurrentByte , _properties.PositionBit, numberBitsToWriteIntoCurrentByte);
+                var test = _properties.Stream.Position;
+                _properties.Stream.WriteByte(_properties.CurrentByte); 
+                
                 _properties.PositionBit += numberBitsToWriteIntoCurrentByte;
                 if (_properties.PositionBit == 8)
                 {
                     _properties.PositionBit = 0;
+                    _properties.PositionByte++;
+                    _properties.Stream.Position = _properties.PositionByte;
                 }
                 bitLeft -= numberBitsToWriteIntoCurrentByte;
             }
-            return sourceValue;
+            return new Position() { BytePosition = _properties.PositionByte, BitPosition = _properties.PositionBit };
+
         }
 
     }
