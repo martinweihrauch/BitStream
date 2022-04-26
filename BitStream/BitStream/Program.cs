@@ -3,4 +3,8 @@ using SharpBitStream;
 
 Console.WriteLine("Hello, World!");
 
-var test = new BitStream();
+int[] testData = { 5, 127, -128, 50, -50 };
+var ms = new MemoryStream();
+var test = new BitStream(ms);
+int test2 = 277388;
+
