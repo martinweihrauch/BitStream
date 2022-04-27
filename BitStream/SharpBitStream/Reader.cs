@@ -69,6 +69,7 @@ namespace SharpBitStream
             {
                 int restBitsInCurrentByte = 8 - _properties.PositionBit;
                 _properties.CurrentByte = (byte)_properties.Stream.ReadByte();
+                _properties.Stream.Position--;
                 _properties.PositionByte = _properties.Stream.Position;
                 int numberBitsToGetFromCurrentByte = bitLeft > restBitsInCurrentByte ? restBitsInCurrentByte : bitLeft;
                 valueOfBits <<= numberBitsToGetFromCurrentByte;
@@ -78,6 +79,8 @@ namespace SharpBitStream
                 if (_properties.PositionBit == 8)
                 {
                     _properties.PositionBit = 0;
+                    _properties.PositionByte++;
+                    _properties.Stream.Position = _properties.PositionByte;
                 }
                 bitLeft -= numberBitsToGetFromCurrentByte;
             }

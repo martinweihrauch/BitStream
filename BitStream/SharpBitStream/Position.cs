@@ -10,5 +10,13 @@ namespace SharpBitStream
     {
         public long BytePosition { get; set; }
         public long BitPosition { get; set; }
+
+
+        public void Rewind()
+        {
+            BytePosition = 0;
+            BitPosition = 0;
+        }
     }
+
 }
