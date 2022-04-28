@@ -33,12 +33,13 @@ foreach (var bits in testDataUnsigned)
     Console.WriteLine("Number read: " + number);
 }
 
-Console.WriteLine("\r\nTest2:\r\nNow a large number spanning multiple bytes in a stream - over 30 bits: 715827882"
-    +"\r\nwhich looks in binary like this: 101010101010101010101010101010");
+Console.WriteLine("\r\nTest2:\r\nNow a small number (14) over 4 bits and a large number with 28 bits: 178,956,970"
+    + "\r\nwhich looks in binary like this: 1110 and 1010101010101010101010101010");
 
 var ms2 = new MemoryStream();
 var bs2 = new BitStream(ms2);
-bs2.WriteUnsigned(30, (ulong)715827882);
+bs2.WriteUnsigned(4, 14);
+bs2.WriteUnsigned(28, 178956970);
 Console.WriteLine("The bytes within the memory stream are: ");
 ms2.Position = 0;
 for(int i = 0; i < ms2.Length; i++)
@@ -50,6 +51,7 @@ for(int i = 0; i < ms2.Length; i++)
 Console.WriteLine("\r\nNow reading the bits back:");
 ms2.Position = 0;
 bs2.SetPosition(0, 0);
-ulong number2 = bs2.ReadUnsigned(30);
-Console.WriteLine("The number read is: " + number2);
+ulong number14 = bs2.ReadUnsigned(4);
+ulong numberLong = bs2.ReadUnsigned(28);
+Console.WriteLine("The number read are: " + number14 + " and: " + numberLong);
     

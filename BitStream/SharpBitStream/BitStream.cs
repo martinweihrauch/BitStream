@@ -27,26 +27,22 @@ namespace SharpBitStream
 
         public ulong ReadUnsigned(long offsetByteStream, int offsetBit, int bitLength)
         {
-            _reader.CheckIfReadIsValid(bitLength, offsetByteStream, offsetBit);
             return _reader.GetBits(offsetByteStream, offsetBit, bitLength);
         }
 
         public ulong ReadUnsigned(int bitLength)
         {
-            _reader.CheckIfReadIsValid(bitLength, _properties.PositionByte, _properties.PositionBit);
             return _reader.GetBits(_properties.PositionByte, _properties.PositionBit, bitLength);
         }
 
         public long ReadSigned(long offsetByteStream, int offsetBit, int bitLength)
         {
-            _reader.CheckIfReadIsValid(bitLength, offsetByteStream, offsetBit);
             ulong val = _reader.GetBits(offsetByteStream, offsetBit, bitLength);
             return _reader.ConvertUnsignedToSigned(val, bitLength);
         }
 
         public long ReadSigned(int bitLength)
         {
-            _reader.CheckIfReadIsValid(bitLength, _properties.PositionByte, _properties.PositionBit);
             ulong val = _reader.GetBits(_properties.PositionByte, _properties.PositionBit, bitLength);
             return _reader.ConvertUnsignedToSigned(val, bitLength);
         }
