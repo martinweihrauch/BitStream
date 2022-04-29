@@ -9,6 +9,12 @@ Console.WriteLine("Test1: \r\nFirst testing writing and reading small numbers of
 Console.WriteLine("There are 5 unsigned ints , which shall be written into 6 bits each as they are all small than 64: 5, 62, 17, 50, 33");
 foreach(var bits in testDataUnsigned)
 {
+    //Can I really write this (optional):
+    if(!bs.IsWriteValid(6, (long)bits))
+    {
+        Console.WriteLine("Something went wrong with writing!");
+        break;
+    }
     bs.WriteUnsigned(6, (ulong)bits);
 }
 
@@ -29,6 +35,11 @@ bs.SetPosition(0, 0);
 
 foreach (var bits in testDataUnsigned)
 {
+    if (!bs.IsReadValid(6))
+    {
+        Console.WriteLine("Ooops, there is an error - cannot read!");
+        break;
+    }
     ulong number = bs.ReadUnsigned(6);
     Console.WriteLine("Number read: " + number);
 }
