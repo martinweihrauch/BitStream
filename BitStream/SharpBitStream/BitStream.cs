@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * BitStream was written and is copyrighted by Martin Weihrauch (c) 2022
+ * It is open source and can be used under MIT license * 
+ * 
+ */
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

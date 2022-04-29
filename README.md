@@ -3,6 +3,7 @@
 ## Introduction
 When you are creating a storage of binary data, maybe creating your own file format or some way of compression, you will see that you are restricted by the 8-bite = 1 byte representation, when it comes to saving space. E.g., it does not matter, whether you are storing the number 5 or number 255 - both need 8 bit. 
 With Bitstream, you can write any unsigned or signed value to a number of bits (set by you) and the bits of consecutive numbers are merged in the bytes of the underlying byte stream.
+BitStream can be used under the MIT license, (c) by Martin Weihrauch 2022
 
 ## Quick Start
 Here are 2 examples of how to first write numbers to a BitStream and then how to read them:

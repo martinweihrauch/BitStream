@@ -1,4 +1,9 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿/*
+ * BitStream was written and is copyrighted by Martin Weihrauch (c) 2022
+ * It is open source and can be used under MIT license * 
+ * 
+ */
+
 using SharpBitStream;
 
 uint[] testDataUnsigned = { 5, 62, 17, 50, 33 };
