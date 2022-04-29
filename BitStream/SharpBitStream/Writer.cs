@@ -79,9 +79,7 @@ namespace SharpBitStream
                 int numberBitsToWriteIntoCurrentByte = bitLeft > restBitsInCurrentByte ? restBitsInCurrentByte : bitLeft;
                 byte tempSource = (byte)(sourceValue >> (bitLeft - numberBitsToWriteIntoCurrentByte)); // Get the most right 8 bits
                 _properties.CurrentByte = Common.CopyBitsIntoByte(tempSource, _properties.CurrentByte, 8-numberBitsToWriteIntoCurrentByte , _properties.PositionBit, numberBitsToWriteIntoCurrentByte);
-                var test = _properties.Stream.Position;
                 _properties.Stream.WriteByte(_properties.CurrentByte); 
-                
                 _properties.PositionBit += numberBitsToWriteIntoCurrentByte;
                 if (_properties.PositionBit == 8)
                 {
@@ -91,7 +89,7 @@ namespace SharpBitStream
                 }
                 bitLeft -= numberBitsToWriteIntoCurrentByte;
             }
-            return new Position() { BytePosition = _properties.PositionByte, BitPosition = _properties.PositionBit };
+            return new Position(_properties.PositionByte, _properties.PositionBit);
 
         }
 

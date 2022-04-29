@@ -29,7 +29,7 @@ bs.SetPosition(0, 0);
 
 foreach (var bits in testDataUnsigned)
 {
-    ulong number = (uint)bs.ReadUnsigned(6);
+    ulong number = bs.ReadUnsigned(6);
     Console.WriteLine("Number read: " + number);
 }
 
@@ -51,6 +51,7 @@ for(int i = 0; i < ms2.Length; i++)
 Console.WriteLine("\r\nNow reading the bits back:");
 ms2.Position = 0;
 bs2.SetPosition(0, 0);
+Position temp = bs2.GetPosition();
 ulong number14 = bs2.ReadUnsigned(4);
 ulong numberLong = bs2.ReadUnsigned(28);
 Console.WriteLine("The number read are: " + number14 + " and: " + numberLong);

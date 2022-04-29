@@ -27,6 +27,8 @@ namespace SharpBitStream
 
         public ulong ReadUnsigned(long offsetByteStream, int offsetBit, int bitLength)
         {
+            _properties.PositionBit = offsetBit;
+            _properties.PositionByte = offsetByteStream;
             return _reader.GetBits(offsetByteStream, offsetBit, bitLength);
         }
 
@@ -37,6 +39,8 @@ namespace SharpBitStream
 
         public long ReadSigned(long offsetByteStream, int offsetBit, int bitLength)
         {
+            _properties.PositionBit = offsetBit;
+            _properties.PositionByte = offsetByteStream;
             ulong val = _reader.GetBits(offsetByteStream, offsetBit, bitLength);
             return _reader.ConvertUnsignedToSigned(val, bitLength);
         }
@@ -49,6 +53,8 @@ namespace SharpBitStream
 
         public void WriteUnsigned(long offsetByteStream, int offsetBit, int bitLength, ulong value)
         {
+            _properties.PositionBit = offsetBit;
+            _properties.PositionByte = offsetByteStream;
             _writer.PutBits(offsetByteStream, offsetBit, bitLength, value);
         }
 
@@ -59,6 +65,8 @@ namespace SharpBitStream
 
         public void WriteSigned(long offsetByteStream, int offsetBit, int bitLength, long value)
         {
+            _properties.PositionBit = offsetBit;
+            _properties.PositionByte = offsetByteStream;
             ulong val = _writer.ConvertSignedToUnsigned(value, bitLength);
             _writer.PutBits(offsetByteStream, offsetBit, bitLength, val);
         }
@@ -69,6 +77,25 @@ namespace SharpBitStream
             _writer.PutBits(_properties.PositionByte, _properties.PositionBit, bitLength, val);
         }
 
+        public bool IsWriteValid(int bitLength, long value)
+        {
+            if(value >= 0)
+            {
+                if (value < Math.Pow(2, bitLength)){
+                    return true;
+                }
+            }
+            else
+            {
+                value *= -1;
+                if (value <= Math.Pow(2, bitLength - 1))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public bool IsReadValid(int bitLength, long offsetByteStream = 0, int offsetBit = 0)
         {
             if (_reader.CheckIfReadIsValid(bitLength, offsetByteStream, offsetBit))
@@ -77,10 +104,18 @@ namespace SharpBitStream
             }
             return false;
         }
+        public bool IsReadValid(int bitLength)
+        {
+            if (_reader.CheckIfReadIsValid(bitLength, _properties.PositionByte, _properties.PositionBit))
+            {
+                return true;
+            }
+            return false;
+        }
 
         public Position GetPosition()
         {
-            return new Position() { BytePosition = _properties.PositionByte, BitPosition = _properties.PositionBit };
+            return new Position(_properties.PositionByte, _properties.PositionBit);
         }
 
         public void SetPosition(long bytePosition, int bitPosition)
@@ -88,12 +123,20 @@ namespace SharpBitStream
             _properties.PositionByte = bytePosition;
             _properties.PositionBit = bitPosition;
         }
-
-
-        private long FlushBitPosition()
+        public void SetPosition(Position position)
         {
-            _properties.PositionByte++;
-            _properties.PositionBit = 0;
+            _properties.PositionByte = position.BytePosition;
+            _properties.PositionBit = position.BitPosition;
+        }
+
+
+        public long FlushBitPosition()
+        {
+            if(_properties.PositionBit != 0)
+            {
+                _properties.PositionBit = 0;
+                _properties.PositionByte++;
+            }
             return _properties.PositionByte;
         }
     
