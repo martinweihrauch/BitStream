@@ -95,7 +95,8 @@ bs.WriteUnsigned(3, 2, 4, 5);
 // bs.WriteSigned(3, 2, 4, -5);
 ```
 This means, you can control that you write to the 4th byte (3, because starting at 0) in the underlying byte Stream, 
-starting from the the 3rd (=2) position of the byte with a length of 6 bits and the value 5 (=0b0101);
+starting from the the 3rd (=2) position of the byte with a length of 6 bits and the value 5 (=0b0101).
+
 **Important**: Counting the bit position starts at 0 and with the left-most (most significant) bit! Just like writing bytes to the underlying stream, it counts from left to right!
 
 If you have written a couple of bits to the stream and want that the next read/write will be starting at the next "fresh byte" and you are still at some 
