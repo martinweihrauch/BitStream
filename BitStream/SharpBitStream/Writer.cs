@@ -15,25 +15,7 @@ namespace SharpBitStream
         }
 
  
-        public long ConvertUnsignedToSigned(ulong value, int bitLength)
-        {
-            long temp = (long)value & 1 << bitLength - 1;
-            if (temp != 0) // != 0 means there is a 1 at the most significant bit
-            {
-                temp = -1 * (~(long)value + 1 & ~(~(long)0 << bitLength));
-            }
-            else
-            {
-                temp = (long)value;
-            }
-            return temp;
-        }
-
-        public ulong ConvertSignedToUnsigned(long value, int bitLength)
-        {
-            ulong temp = (ulong)(value & ~(~(long)0 << bitLength));
-            return temp;
-        }
+        
 
         public void CheckIfWriteIsLegit(ulong value, int bitLength)
         {

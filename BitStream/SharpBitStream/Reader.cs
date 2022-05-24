@@ -14,26 +14,7 @@ namespace SharpBitStream
             _properties = streamProperties;
         }
 
-        public long ConvertUnsignedToSigned(ulong value, int bitLength)
-        {
-            long temp = (long)value & 1 << bitLength - 1;
-            if (temp != 0) // != 0 means there is a 1 at the most significant bit
-            {
-                temp = -1 * (~(long)value + 1 & ~(~(long)0 << bitLength));
-            }
-            else
-            {
-                temp = (long)value;
-            }
-            return temp;
-        }
-
-        public ulong ConvertSignedToUnsigned(long value, int bitLength)
-        {
-            ulong temp = (ulong)(value & ~(~(long)0 << bitLength));
-            return temp;
-        }
-
+        
         public bool CheckIfReadIsValid(int bitLength, long offsetByteStream = 0, int offsetBit = 0)
         {
             if (offsetByteStream * 8 + offsetBit + bitLength > _properties.Stream.Length * 8)
@@ -51,7 +32,7 @@ namespace SharpBitStream
         public long GetSignedBits(long offsetByteStream, int offsetBit, int bitLength)
         {
             ulong result = GetBits(offsetByteStream, offsetBit, bitLength);
-            return ConvertUnsignedToSigned(result, bitLength);
+            return Common.ConvertUnsignedToSigned(result, bitLength);
         }
 
         public ulong GetUnsignedBits(long offsetByteStream, int offsetBit, int bitLength)

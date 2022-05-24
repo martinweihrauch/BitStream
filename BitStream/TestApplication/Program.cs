@@ -6,6 +6,7 @@
 
 using SharpBitStream;
 
+
 uint[] testDataUnsigned = { 5, 62, 17, 50, 33 };
 var ms = new MemoryStream();
 var bs = new BitStream(ms);
@@ -49,6 +50,8 @@ foreach (var bits in testDataUnsigned)
     Console.WriteLine("Number read: " + number);
 }
 
+Console.WriteLine("-------------------------------------------------------");
+
 Console.WriteLine("\r\nTest2:\r\nNow a small number (14) over 4 bits and a large number with 28 bits: 178,956,970"
     + "\r\nwhich looks in binary like this: 1110 and 1010101010101010101010101010");
 
@@ -71,4 +74,87 @@ Position temp = bs2.GetPosition();
 ulong number14 = bs2.ReadUnsigned(4);
 ulong numberLong = bs2.ReadUnsigned(28);
 Console.WriteLine("The number read are: " + number14 + " and: " + numberLong);
-    
+
+
+
+Console.WriteLine("-------------------------------------------------------");
+Console.WriteLine("There are 5 SIGNED ints , which shall be written into 7 bits each as they are all small than -64 to 63: 5, -62, 17, -50, -33, 0");
+
+
+int[] testDataSigned = { 5, -62, 17, -50, -33, 0 };
+var msSigned = new MemoryStream();
+var bsSigned = new BitStream(msSigned);
+Console.WriteLine("Test1: \r\nFirst testing writing and reading signed numbers of a max of 7 bits.");
+
+foreach (var bits in testDataSigned)
+{
+    //Can I really write this (optional):
+    if (!bsSigned.IsWriteValid(7, (long)bits))
+    {
+        Console.WriteLine("Something went wrong with writing!");
+        break;
+    }
+    bsSigned.WriteSigned(7, (long)bits);
+}
+
+
+Console.WriteLine("\r\nNow reading the bits back:");
+msSigned.Position = 0;
+bsSigned.SetPosition(0, 0);
+
+foreach (var bits in testDataSigned)
+{
+    if (!bsSigned.IsReadValid(7))
+    {
+        Console.WriteLine("Ooops, there is an error - cannot read!");
+        break;
+    }
+    long number = bsSigned.ReadSigned(7);
+    Console.WriteLine("Number read: " + number);
+}
+
+Console.WriteLine("-------------------------------------------------------");
+Console.WriteLine("There are 5 SIGNED ints , which shall be written into 11 bits each as they are all small than -1024 to 1023: -1023, -19, 1019, -50");
+
+
+int[] testDataSignedLong = { -1023, -19, 1019, -50 };
+var msSignedLong = new MemoryStream();
+var bsSignedLong = new BitStream(msSignedLong);
+Console.WriteLine("Test1: \r\nWriting and reading signed numbers of a max of 11 bits.");
+
+foreach (var bits in testDataSignedLong)
+{
+    //Can I really write this (optional):
+    if (!bsSignedLong.IsWriteValid(11, (long)bits))
+    {
+        Console.WriteLine("Something went wrong with writing!");
+        break;
+    }
+    bsSignedLong.WriteSigned(11, (long)bits);
+}
+
+msSignedLong.Position = 0;
+
+Console.WriteLine("The resulting bytes in the stream look like this: ");
+for (int i = 0; i < msSignedLong.Length; i++)
+{
+    uint bits = (uint)msSignedLong.ReadByte();
+    Console.WriteLine("Byte #" + Convert.ToString(i).PadLeft(4, '0') + ": " + Convert.ToString(bits, 2).PadLeft(8, '0'));
+}
+
+
+
+Console.WriteLine("\r\nNow reading the bits back:");
+msSignedLong.Position = 0;
+bsSignedLong.SetPosition(0, 0);
+
+foreach (var bits in testDataSignedLong)
+{
+    if (!bsSignedLong.IsReadValid(11))
+    {
+        Console.WriteLine("Ooops, there is an error - cannot read!");
+        break;
+    }
+    long number = bsSignedLong.ReadSigned(11);
+    Console.WriteLine("Number read: " + number);
+}

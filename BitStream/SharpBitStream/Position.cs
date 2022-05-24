@@ -16,6 +16,14 @@ namespace SharpBitStream
             BytePosition = bytePosition;
             BitPosition = bitPosition;
         }
+
+        public void AddBits(int bits)
+        {
+            long totalBits = BytePosition * 8 + BitPosition + bits;
+            BytePosition = (long)Math.Floor((double)totalBits / 8);
+            BitPosition = (int)(totalBits % 8);
+        }
+
         public void Rewind()
         {
             BytePosition = 0;

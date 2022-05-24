@@ -49,13 +49,13 @@ namespace SharpBitStream
             _properties.PositionBit = offsetBit;
             _properties.PositionByte = offsetByteStream;
             ulong val = _reader.GetBits(offsetByteStream, offsetBit, bitLength);
-            return _reader.ConvertUnsignedToSigned(val, bitLength);
+            return Common.ConvertUnsignedToSigned(val, bitLength);
         }
 
         public long ReadSigned(int bitLength)
         {
             ulong val = _reader.GetBits(_properties.PositionByte, _properties.PositionBit, bitLength);
-            return _reader.ConvertUnsignedToSigned(val, bitLength);
+            return Common.ConvertUnsignedToSigned(val, bitLength);
         }
 
         public void WriteUnsigned(long offsetByteStream, int offsetBit, int bitLength, ulong value)
@@ -74,14 +74,12 @@ namespace SharpBitStream
         {
             _properties.PositionBit = offsetBit;
             _properties.PositionByte = offsetByteStream;
-            ulong val = _writer.ConvertSignedToUnsigned(value, bitLength);
-            _writer.PutBits(offsetByteStream, offsetBit, bitLength, val);
+            _writer.PutBits(offsetByteStream, offsetBit, bitLength, (ulong)value);
         }
 
         public void WriteSigned(int bitLength, long value)
         {
-            ulong val = _writer.ConvertSignedToUnsigned(value, bitLength);
-            _writer.PutBits(_properties.PositionByte, _properties.PositionBit, bitLength, val);
+            _writer.PutBits(_properties.PositionByte, _properties.PositionBit, bitLength, (ulong)value);
         }
 
         public bool IsWriteValid(int bitLength, long value)

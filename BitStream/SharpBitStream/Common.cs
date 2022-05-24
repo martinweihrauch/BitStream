@@ -27,15 +27,14 @@ namespace SharpBitStream
 			return (byte)(sourceToCopy | destinationToCopy);
 		}
 
-		/*
-		 * 
-		    private void Write32(ulong value, byte[] buffer, int offset)
-			{
-				buffer[offset++] = (byte)((value >> 24) & 0xFF);
-				buffer[offset++] = (byte)((value >> 16) & 0xFF);
-				buffer[offset++] = (byte)((value >> 8) & 0xFF);
-				buffer[offset] = (byte)(value & 0xFF);
+		public static long ConvertUnsignedToSigned(ulong value, int bitLength)
+		{
+			if(value >> bitLength - 1 != 0)
+            {
+				long mask = ~0 << bitLength;
+				return ((long)value | mask);
 			}
-		 */
+			return (long)value;
+		}
 	}
 }
