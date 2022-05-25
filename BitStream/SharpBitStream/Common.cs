@@ -29,7 +29,7 @@ namespace SharpBitStream
 
 		public static long ConvertUnsignedToSigned(ulong value, int bitLength)
 		{
-			if(value >> bitLength - 1 != 0)
+			if (((value >> (bitLength - 1)) & 1) != 0)
             {
 				long mask = ~0 << bitLength;
 				return ((long)value | mask);
